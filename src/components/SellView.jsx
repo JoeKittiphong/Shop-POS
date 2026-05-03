@@ -4,15 +4,6 @@ function hasProductPhoto(image) {
   return typeof image === 'string' && /^(data:image\/|https?:\/\/|blob:|\/)/.test(image)
 }
 
-function getProductCardStyle(image) {
-  if (!hasProductPhoto(image)) {
-    return undefined
-  }
-
-  return {
-    backgroundImage: `linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0.04) 40%, rgba(15, 23, 42, 0.45) 100%), url("${image}")`,
-  }
-}
 
 function SellView({
   cart,
@@ -79,16 +70,14 @@ function SellView({
                   type="button"
                   className={`product-card dense-product-card product-showcase-card ${hasPhoto ? 'has-photo' : 'no-photo'}`}
                   onClick={() => onAddToCart(product)}
-                  style={getProductCardStyle(product.image)}
+                  style={{ backgroundImage: hasPhoto ? `url("${product.image}")` : undefined }}
                 >
-                  <strong className="product-showcase-name">{product.name}</strong>
-                  <div className="product-showcase-media">
-                    {!hasPhoto ? (
-                      <div className="product-card-fallback product-showcase-fallback">
-                        {fallbackLabel}
-                      </div>
-                    ) : null}
-                  </div>
+                  <strong className="product-showcase-name" title={product.name}>{product.name}</strong>
+                  {!hasPhoto && (
+                    <div className="product-card-fallback product-showcase-fallback">
+                      {fallbackLabel}
+                    </div>
+                  )}
                   <strong className="product-showcase-price">{currencyFormatter.format(product.price)}</strong>
                 </button>
               )
